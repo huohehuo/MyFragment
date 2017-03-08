@@ -22,6 +22,11 @@ import java.util.TimerTask;
 import lins.com.myfragment.R;
 import lins.com.myfragment.twofragment.TwoActivity;
 
+/*
+* 主界面：相对布局和线性布局
+* 线性布局负责页面的切换
+* 特点：有个光标随动效果
+* */
 public class ThrActivity extends FragmentActivity implements View.OnClickListener {
     private ImageView mBt1, mBt2, mBt3, mBt4;
     private ImageView mSelBg;
@@ -35,13 +40,12 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thr);
-
-
         init();
-
         changePerson();
     }
+    //控件的绑定，事件监听，
     private void init() {
+        //底部选项卡布局
         mTab_item_container = (LinearLayout) findViewById(R.id.tab_item_container);
 
         mBt1 = (ImageView) findViewById(R.id.tab_bt_1);
@@ -78,11 +82,12 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
     public void onClick(View arg0) {
         switch (arg0.getId()) {
             case R.id.tab_bt_1:
+                //底部布局的选项卡设置光标随动
                 last = mTab_item_container.getChildAt(mSelectIndex);
                 now = mTab_item_container.getChildAt(0);
-                startAnimation(last, now);
+                startAnimation(last, now);//启动光标动画
                 mSelectIndex = 0;
-
+                //切换fragment
                 changePerson();
                 break;
             case R.id.tab_bt_2:
@@ -114,6 +119,7 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
         }
     }
 
+    //设置光标动画
     private void startAnimation(View last, View now) {
         TranslateAnimation ta = new TranslateAnimation(last.getLeft(), now.getLeft(), 0, 0);
         ta.setDuration(300);
@@ -126,8 +132,9 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
      */
     private void changePerson() {
         Fragment f = new Home1Fra();
-        if (null == mFM)
+        if (null == mFM){
             mFM = getSupportFragmentManager();
+        }
         FragmentTransaction ft = mFM.beginTransaction();
         ft.replace(R.id.content_container, f);
         ft.commit();
@@ -138,8 +145,9 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
      */
     public void changeBussiness() {
         Fragment f = new Home2Fra();
-        if (null == mFM)
+        if (null == mFM){
             mFM = getSupportFragmentManager();
+        }
         FragmentTransaction ft = mFM.beginTransaction();
         ft.replace(R.id.content_container, f);
         ft.commit();
@@ -150,8 +158,9 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
      */
     public void changeMessage() {
         Fragment f = new Home3Fra();
-        if (null == mFM)
+        if (null == mFM){
             mFM = getSupportFragmentManager();
+        }
         FragmentTransaction ft = mFM.beginTransaction();
         ft.replace(R.id.content_container, f);
         ft.commit();
@@ -162,8 +171,9 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
      */
     public void changeSetting() {
         Fragment f = new SettingFra();
-        if (null == mFM)
+        if (null == mFM){
             mFM = getSupportFragmentManager();
+        }
         FragmentTransaction ft = mFM.beginTransaction();
         ft.replace(R.id.content_container, f);
         ft.commit();
@@ -193,8 +203,5 @@ public class ThrActivity extends FragmentActivity implements View.OnClickListene
         } else {
         }
         return false;
-    }
-    public static void openOne(Context context){
-        context.startActivity(new Intent(context,ThrActivity.class));
     }
 }

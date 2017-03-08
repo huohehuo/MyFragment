@@ -1,5 +1,6 @@
 package lins.com.myfragment;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.app.AppCompatActivity;
@@ -36,13 +37,13 @@ public class MainActivity extends AppCompatActivity{
         binding.btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ThrActivity.openOne(MainActivity.this);
+                startActivity(new Intent(App.getContext(),ThrActivity.class));
             }
         });
         binding.btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FourActivity.openOne(MainActivity.this);
+                startActivity(new Intent(App.getContext(),FourActivity.class));
             }
         });
     }

@@ -20,28 +20,31 @@
         android:layout_height="90dp"
         style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/btn"
-        android:text="fragment的使用场景" />
+        android:text="fragment的使用场景1" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="90dp"
         style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/btn2"
-        android:text="fragment的使用场景"
+        android:text="fragment的使用场景2
+        (RadioGroup)"
          />
     <Button
         android:layout_width="match_parent"
         android:layout_height="90dp"
         style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/btn3"
-        android:text="fragment的使用场景"
+        android:text="fragment的使用场景3
+        (ImageView)"
         />
     <Button
         android:layout_width="match_parent"
         android:layout_height="90dp"
         style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/btn4"
-        android:text="fragment的使用场景"
+        android:text="fragment的使用场景4
+        (FragmentTabHost)"
         />
 </LinearLayout>
 </layout>

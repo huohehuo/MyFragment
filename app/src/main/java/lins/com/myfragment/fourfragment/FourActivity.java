@@ -22,49 +22,43 @@ import java.util.List;
 import lins.com.myfragment.R;
 import lins.com.myfragment.thrfragment.ThrActivity;
 
+/*    利用FragmentTabHost作为父布局的fragment页面处理方式
+    切换由Viewpager来填充*/
+
 public class FourActivity extends AppCompatActivity {
     private FragmentTabHost mTabHost;
     private ViewPager mViewPager;
     private List<Fragment> mFragmentList;
-    private Class mClass[] = {HomeFragment.class,ReportFragment.class,MessageFragment.class,MineFragment.class};
-    private Fragment mFragment[] = {new HomeFragment(),new ReportFragment(),new MessageFragment(),new MineFragment()};
-    private String mTitles[] = {"首页","报表","消息","我的"};
-    private int mImages[] = {
-            R.drawable.tab_home,
-            R.drawable.tab_report,
-            R.drawable.tab_message,
-            R.drawable.tab_mine
-    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_four);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         init();
-
     }
-
     private void init() {
-
-        initView();
-
-        initEvent();
+        initView();//初始化fragment
+        initEvent();//初始化Tab和Viewpager的监听
     }
 
+
+    //填充fragment需要的资源
+    private Class mClass[] = {HomeFragment.class, ReportFragment.class, MessageFragment.class, MineFragment.class};
+    private Fragment mFragment[] = {new HomeFragment(), new ReportFragment(), new MessageFragment(), new MineFragment()};
+    //设置并填充fragment，设置viewpager
     private void initView() {
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-
         mFragmentList = new ArrayList<Fragment>();
 
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null);
-
-        for (int i = 0;i < mFragment.length;i++){
+        //设置每个Tab对应的Fragment
+        for (int i = 0; i < mFragment.length; i++) {
             TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTitles[i]).setIndicator(getTabView(i));
-            mTabHost.addTab(tabSpec,mClass[i],null);
+            mTabHost.addTab(tabSpec, mClass[i], null);
             mFragmentList.add(mFragment[i]);
             mTabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.WHITE);
         }
@@ -82,49 +76,42 @@ public class FourActivity extends AppCompatActivity {
         });
     }
 
+    //设置Tab的资源
+    private String mTitles[] = {"首页", "报表", "消息", "我的"};
+    private int mImages[] = {R.drawable.tab_home,R.drawable.tab_report,
+            R.drawable.tab_message,R.drawable.tab_mine};
+    //设置并获取Tab的item
     private View getTabView(int index) {
+        //获取每个tab的图标和文字item
         View view = LayoutInflater.from(this).inflate(R.layout.tab_item, null);
-
         ImageView image = (ImageView) view.findViewById(R.id.image);
         TextView title = (TextView) view.findViewById(R.id.title);
-
-        image.setImageResource(mImages[index]);
-        title.setText(mTitles[index]);
-
+        image.setImageResource(mImages[index]);//设置Tab图标
+        title.setText(mTitles[index]);//设置Tab标题
         return view;
     }
 
     private void initEvent() {
-
+        //Tab的变化监听
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                mViewPager.setCurrentItem(mTabHost.getCurrentTab());
+                mViewPager.setCurrentItem(mTabHost.getCurrentTab());//Tab变化时ViewPager的联动
             }
         });
-
+        //ViewPager的变化监听
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
-                mTabHost.setCurrentTab(position);
+                mTabHost.setCurrentTab(position);//ViewPager变化时Tab的联动
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
-    }
-
-
-
-    public static void openOne(Context context){
-        context.startActivity(new Intent(context,FourActivity.class));
     }
 }
