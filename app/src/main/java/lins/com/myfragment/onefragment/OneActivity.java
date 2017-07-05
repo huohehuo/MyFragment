@@ -2,91 +2,100 @@ package lins.com.myfragment.onefragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TabWidget;
+import android.widget.TextView;
 
 import lins.com.myfragment.R;
-import lins.com.myfragment.onefragment.childfragment.oneFragment;
-import lins.com.myfragment.onefragment.childfragment.twoFragment;
-import lins.com.myfragment.onefragment.childfragment.threeFragment;
 import lins.com.myfragment.onefragment.childfragment.FourFragment;
+import lins.com.myfragment.onefragment.childfragment.OneFragment;
+import lins.com.myfragment.onefragment.childfragment.ThreeFragment;
+import lins.com.myfragment.onefragment.childfragment.TwoFragment;
 
-public class OneActivity extends BaseActivity {
-    private View activityRootView;
-    //屏幕高度
-    private int screenHeight = 0;
-    //软件盘弹起后所占高度阀值  
-    private int keyHeight    = 0;
+public class OneActivity extends FragmentActivity {
+
+    FragmentTabHostEx mTabHost;
+    private TabWidget mTabs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one);
-        //获取屏幕高度  
-        screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
-        keyHeight = screenHeight / 3;
-        StatusBarUtil.StatusBarLightMode(this);
-        activityRootView = findViewById(R.id.main_root_view);
 
-        findViewById(R.id.ivShow).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //中间的按钮
-            }
-        });
-        FragmentTabHostEx mTabHost = (FragmentTabHostEx) findViewById(android.R.id.tabhost);
+        mTabHost = (FragmentTabHostEx) findViewById(android.R.id.tabhost);
+        mTabs = (TabWidget)findViewById(android.R.id.tabs);
+
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
         MainTab[] mainTabs = MainTab.values();
+
+
         for (int i = 0; i < mainTabs.length; ++i) {
             MainTab mainTab = mainTabs[i];
+            Log.e("tag",mainTab.getTag());
             TabHost.TabSpec tab = mTabHost.newTabSpec(mainTab.getTag());
 
             View indicatorView = getLayoutInflater().inflate(R.layout.tab_indicator, null);
-            if (i == 2) {
-                mTabHost.setNoTabChangedTag(mainTab.getTag());
-            }
+//            if (i == 2) {
+//                mTabHost.setNoTabChangedTag(mainTab.getTag());
+//            }
             ImageView ivTabIcon = (ImageView) indicatorView.findViewById(R.id.ivTabIcon);
             ivTabIcon.setImageDrawable(getResources().getDrawable(mainTab.getResIcon()));
+
+            TextView tvText = (TextView)indicatorView.findViewById(R.id.tvText);
+            tvText.setText(getResources().getText(mainTab.getResText()));
 
             tab.setIndicator(indicatorView);
             mTabHost.addTab(tab, mainTab.getClz(), null);
         }
+//        changeContent(MainTab.COLLEGE);
     }
 
+//    public void changeContent(MainTab tab){
+//        mTabHost.setCurrentTab(tab.getIdx());
+//        mTabs.setCurrentTab(tab.getIdx());
+//    }
+    public enum MainTab {
 
-    private enum MainTab {
+        LIVE(0, ThreeFragment.TAG, R.string.app_name,R.drawable.tab_find_selector,
+                ThreeFragment.class),
 
-        LIVE(0, threeFragment.TAG, R.drawable.home_selected,
-                threeFragment.class),
+        COLLEGE(1, TwoFragment.TAG, R.string.app_name, R.drawable.tab_find_selector,
+                TwoFragment.class),
 
-        COLLEGE(1, twoFragment.TAG, R.drawable.langya,
-                twoFragment.class),
+//        START(2, "none",  R.string.app_name,R.drawable.circle,
+//                null),
 
-        START(2, "none", R.drawable.circle,
-                null),
+        RANKING(2, FourFragment.TAG,  R.string.app_name,R.drawable.tab_find_selector,
+                FourFragment.class),
 
-        RANKING(3, oneFragment.TAG, R.drawable.circle,
-                oneFragment.class),
-
-        ME(4, FourFragment.TAG, R.drawable.me,
-                FourFragment.class);
+        ME(3, OneFragment.TAG, R.string.app_name, R.drawable.tab_find_selector,
+                OneFragment.class);
 
         private int      idx;
         private String   tag;
+        private int resText;
         private int      resIcon;
         private Class<?> clz;
 
-        MainTab(int idx, String tag, int resIcon, Class<?> clz) {
+        MainTab(int idx, String tag,int resText, int resIcon, Class<?> clz) {
             this.idx = idx;
             this.tag = tag;
+            this.resText = resText;
             this.resIcon = resIcon;
             this.clz = clz;
+        }
+
+        public int getResText() {
+            return resText;
+        }
+
+        public void setResText(int resText) {
+            this.resText = resText;
         }
 
         public int getIdx() {
@@ -125,29 +134,29 @@ public class OneActivity extends BaseActivity {
     /**
      * clear focus on touch outside
      *
-     * @param event
+//     * @param event
      * @return
      */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-//                    v.clearFocus();
-                    v.setFocusableInTouchMode(false);
-                    v.setFocusable(false);
-                    v.setFocusableInTouchMode(true);
-                    v.setFocusable(true);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            View v = getCurrentFocus();
+//            if (v instanceof EditText) {
+//                Rect outRect = new Rect();
+//                v.getGlobalVisibleRect(outRect);
+//                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+////                    v.clearFocus();
+//                    v.setFocusableInTouchMode(false);
+//                    v.setFocusable(false);
+//                    v.setFocusableInTouchMode(true);
+//                    v.setFocusable(true);
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                }
+//            }
+//        }
+//        return super.dispatchTouchEvent(event);
+//    }
 
     public static void openOne(Context context){
         context.startActivity(new Intent(context,OneActivity.class));

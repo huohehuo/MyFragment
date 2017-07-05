@@ -31,15 +31,15 @@
                 android:layout_gravity="bottom"/>
         </LinearLayout>
     </lins.com.myfragment.onefragment.FragmentTabHostEx>
-    <ImageView
-        android:id="@+id/ivShow"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-4dp"
-        android:src="@mipmap/ic_launcher"
-        />
+    <!--<ImageView-->
+        <!--android:id="@+id/ivShow"-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="-4dp"-->
+        <!--android:src="@mipmap/ic_launcher"-->
+        <!--/>-->
 
 
 </RelativeLayout>
